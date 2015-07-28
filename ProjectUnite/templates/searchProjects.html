@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+<form method='POST' action = '.'>{% csrf_token %}
+{{ form|crispy }}
+<input type = 'submit' value = 'Submit'/>
+</form>
+
+
+  {% for project in projects %}
+ <table border = "1" style = "width:100%">
+ 	<tr>
+ 		<td><li><a href = '/projects/{{ project.projectID }}'>{{ project.name }}</td></a> <td>Email : {{ project.contact_email }}</td> <td>Location : {{ project.location }}</td></br>
+ 	<td>{{ project.expertise }}</td></li>
+ </tr></br>
+ </table>
+  {% endfor %}
+  {% endblock %}
+
+
