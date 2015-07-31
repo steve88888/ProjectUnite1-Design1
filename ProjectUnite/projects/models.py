@@ -21,7 +21,7 @@ LOCATION_OPTIONS = (
 	('WorldWide', 'WorldWide'),
 
 	)
-
+#sligh modt
 class ProjectTitle(models.Model):
 	name = models.CharField(max_length = 100)
 	user = models.ForeignKey(User)
