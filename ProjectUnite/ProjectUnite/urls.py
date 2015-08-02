@@ -27,13 +27,15 @@ urlpatterns = [
 	url(r'^edit/$', 'profiles.views.edit_profile', name='edit_profile'),
 
 	
-    url(r'^newProject/$', 'projects.views.edit_project', name='edit_project'),
+    #url(r'^myProjects/newproject/$', 'projects.views.new_project', name='new_project'),
+    url(r'^newproject/$', 'projects.views.new_project', name='new_project'),
     url(r'^search/$', 'profiles.views.search_profiles', name='search_profiles'),
     url(r'^projectlist/$', 'projects.views.search_projects', name='search_projects'),
     url(r'^all/$', 'profiles.views.all', name='all'),
 	#url(r'^about/$', 'ProjectUnite.views.about', name='about'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^projects/(?P<projectID>\w+)/$','projects.views.single_project', name = 'single_project'),
+    url(r'^editpro/(?P<projectID>\w+)/$','projects.views.edit_project', name = 'edit_project'),
     url(r'^members/(?P<userID>\w+)/$','profiles.views.single_user', name = 'single_user'),
     url(r'^accounts/', include('registration.backends.default.urls')),
 ] 

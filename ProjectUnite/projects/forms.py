@@ -7,7 +7,9 @@ class SearchForm(forms.Form):
 	location = forms.ChoiceField(LOCATION_OPTIONS)
 	expertise = forms.ChoiceField(CATEGORY_OPTIONS)
 	
-
+class DeleteForm(forms.Form):
+	projectID = forms.IntegerField();
+	
 class FormProjectTitle(forms.ModelForm):
 	class Meta:
 		model = ProjectTitle

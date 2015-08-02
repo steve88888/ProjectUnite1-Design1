@@ -1,5 +1,5 @@
 from django.shortcuts import render, RequestContext, render_to_response, Http404
-from .forms import FormProjectTitle, SearchForm
+from .forms import FormProjectTitle, SearchForm, DeleteForm
 from .models import ProjectTitle
 from django.contrib.auth.models import User 
 # Create your views here.
@@ -29,7 +29,22 @@ from django.contrib.auth.models import User
 		
 #	return render_to_response('newProject.html', locals(), context_instance = RequestContext(request))
 
-def edit_project(request):
+
+def new_project(request):
+	title = "Create a new Project"
+	form = FormProjectTitle(request.POST or None)
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.user = request.user
+		instance.save()
+		title = "Project has been sucessfully created"
+	context = {
+		"form": form,
+		"title": title,
+
+	}
+	return render(request, "newProject.html", context)
+def edit_project(request, projectID):
 	title = "Edit Project"
 	projecttitle, created = ProjectTitle.objects.get_or_create(user = request.user)
 	form = FormProjectTitle(request.POST or None, request.FILES or None, instance = projecttitle)
@@ -43,7 +58,7 @@ def edit_project(request):
 		"form": form,
 		"title": title,
 		}
-	return render(request, "newProject.html", context)
+	return render(request, "editProject.html", context)
 
 
 def projectlist(request):
@@ -132,5 +147,20 @@ def single_project(request, projectID):
 	return render_to_response('single_project.html', locals(), context_instance = RequestContext(request))
 
 def my_projects(request):
-
-	return render(request, "myProjects.html", {})
+	current_user = request.user
+	if request.user.is_authenticated():
+		projects = ProjectTitle.objects.filter(user = request.user)
+		form = DeleteForm(request.POST or None)
+		if form.is_valid():
+			deleteID = form.cleaned_data['projectID']
+			if ProjectTitle.objects.filter(user = current_user):
+				if ProjectTitle.objects.filter(projectID = deleteID):
+					b= ProjectTitle.objects.get(projectID = deleteID)
+					b.delete()
+					title = "Project has been sucessfully deleted"
+				else:
+					title = "Project could not be deleted"
+			else:
+				title = "you do not have permission to delete this project"
+	return render_to_response('myProjects.html', locals(), context_instance = RequestContext(request))
+	
